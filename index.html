@@ -1,0 +1,1158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Premium Weather App</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+background:linear-gradient(135deg,#4F46E5,#60A5FA);
+overflow:hidden;
+color:white;
+}
+
+body.dark{
+background:linear-gradient(135deg,#111827,#1F2937);
+}
+
+.app{
+width:390px;
+height:100vh;
+position:relative;
+overflow:hidden;
+}
+
+.glass{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.2);
+box-shadow:0 8px 32px rgba(0,0,0,0.15);
+}
+
+.screen{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+padding:20px;
+padding-bottom:130px;
+overflow-y:auto;
+display:none;
+}
+
+.screen.active{
+display:block;
+}
+
+.screen::-webkit-scrollbar{
+display:none;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.gps-btn{
+width:50px;
+height:50px;
+border:none;
+border-radius:50%;
+background:rgba(255,255,255,0.2);
+color:white;
+font-size:24px;
+}
+
+.weather-box{
+border-radius:35px;
+padding:30px;
+text-align:center;
+}
+
+.weather-box img{
+width:120px;
+}
+
+.weather-box h1{
+font-size:90px;
+font-weight:700;
+}
+
+.hourly-container{
+display:flex;
+gap:15px;
+overflow-x:auto;
+margin-top:20px;
+padding-bottom:10px;
+}
+
+.hourly-container::-webkit-scrollbar{
+display:none;
+}
+
+.hour-card{
+min-width:90px;
+padding:15px;
+border-radius:25px;
+text-align:center;
+}
+
+.hour-card img{
+width:45px;
+margin:10px 0;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+padding:20px;
+border-radius:25px;
+text-align:center;
+}
+
+.search{
+margin-top:20px;
+padding:15px;
+border-radius:20px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.search input{
+width:100%;
+border:none;
+outline:none;
+background:none;
+color:white;
+font-size:16px;
+}
+
+.search input::placeholder{
+color:rgba(255,255,255,0.7);
+}
+
+.search button{
+border:none;
+background:white;
+width:45px;
+height:45px;
+border-radius:50%;
+font-size:18px;
+}
+
+.forecast-item{
+margin-top:15px;
+padding:20px;
+border-radius:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.setting{
+margin-top:20px;
+padding:25px;
+border-radius:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.setting-btn{
+padding:12px 18px;
+border:none;
+border-radius:18px;
+background:white;
+color:#333;
+font-weight:600;
+cursor:pointer;
+}
+
+.bottom{
+position:fixed;
+left:50%;
+transform:translateX(-50%);
+bottom:15px;
+width:350px;
+height:75px;
+border-radius:30px;
+display:flex;
+justify-content:space-around;
+align-items:center;
+z-index:999;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.2);
+}
+
+.nav{
+background:none;
+border:none;
+color:white;
+font-size:26px;
+cursor:pointer;
+}
+
+.nav.active{
+transform:scale(1.2);
+}
+
+.popup{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.popup-box{
+width:320px;
+padding:30px;
+border-radius:30px;
+text-align:center;
+}
+
+.feedback-input,
+.feedback-textarea{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:18px;
+margin-top:15px;
+background:rgba(255,255,255,0.2);
+color:white;
+}
+
+.feedback-input::placeholder,
+.feedback-textarea::placeholder{
+color:rgba(255,255,255,0.7);
+}
+
+.feedback-textarea{
+height:100px;
+resize:none;
+}
+
+.submit-btn,
+.close-btn{
+margin-top:20px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:20px;
+background:white;
+color:#333;
+font-weight:700;
+cursor:pointer;
+}
+
+.stars{
+display:flex;
+justify-content:center;
+gap:12px;
+margin:25px 0;
+font-size:35px;
+cursor:pointer;
+}
+
+.copyright{
+text-align:center;
+margin-top:40px;
+opacity:0.8;
+font-size:14px;
+line-height:1.8;
+padding-bottom:120px;
+}
+
+a{
+color:white;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HOME -->
+
+<section class="screen active"
+id="homeScreen">
+
+<div class="top">
+
+<div>
+
+<h2 id="city">
+Loading...
+</h2>
+
+<p id="time"></p>
+
+</div>
+
+<button class="gps-btn"
+onclick="getLocationWeather()">
+📍
+</button>
+
+</div>
+
+<div class="weather-box glass">
+
+<img id="icon"
+src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
+
+<h1 id="temp">
+--
+</h1>
+
+<h3 id="condition">
+Loading...
+</h3>
+
+<p id="highlow">
+H:--° L:--°
+</p>
+
+</div>
+
+<h2 style="margin-top:20px;">
+Hourly Forecast
+</h2>
+
+<div id="hourlyForecast"
+class="hourly-container">
+
+</div>
+
+<div class="stats">
+
+<div class="card glass">
+💧
+<h4>Humidity</h4>
+<p id="humidity">--</p>
+</div>
+
+<div class="card glass">
+🌬️
+<h4>Wind</h4>
+<p id="wind">--</p>
+</div>
+
+<div class="card glass">
+📈
+<h4>Pressure</h4>
+<p id="pressure">--</p>
+</div>
+
+<div class="card glass">
+☀️
+<h4>UV</h4>
+<p>4</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="screen"
+id="searchScreen">
+
+<h1>
+Search City
+</h1>
+
+<div class="search glass">
+
+<input type="text"
+id="searchInput"
+placeholder="Search city">
+
+<button onclick="searchCity()">
+🔍
+</button>
+
+</div>
+
+</section>
+
+<!-- FORECAST -->
+
+<section class="screen"
+id="forecastScreen">
+
+<h1>
+7-Day Forecast
+</h1>
+
+<div id="forecastList"></div>
+
+</section>
+
+<!-- SETTINGS -->
+
+<section class="screen"
+id="settingsScreen">
+
+<h1>
+Settings
+</h1>
+
+<div class="setting glass">
+
+<div>
+<h3>🌙 Dark Mode</h3>
+<p>Enable dark theme</p>
+</div>
+
+<button id="darkBtn"
+class="setting-btn">
+ON
+</button>
+
+</div>
+
+<div class="setting glass">
+
+<div>
+<h3>📍 Location</h3>
+<p>Use live GPS weather</p>
+</div>
+
+<button onclick="getLocationWeather()"
+class="setting-btn">
+Enable
+</button>
+
+</div>
+
+<div class="setting glass">
+
+<div>
+<h3>⭐ Rate App</h3>
+<p>Send feedback</p>
+</div>
+
+<button class="setting-btn"
+onclick="openRatePopup()">
+Rate
+</button>
+
+</div>
+
+<div class="setting glass">
+
+<div>
+<h3>ℹ️ About</h3>
+<p>Version 1.0.0</p>
+</div>
+
+<button class="setting-btn"
+onclick="openPopup()">
+Info
+</button>
+
+</div>
+
+<!-- CONTACT US -->
+
+<div class="setting glass">
+
+<div>
+<h3>📞 Contact With Us</h3>
+<p>Reach us anytime</p>
+</div>
+
+<button class="setting-btn"
+onclick="openContactPopup()">
+Contact
+</button>
+
+</div>
+
+<div class="copyright">
+
+© 2026 Weather App. All rights reserved.
+
+<br>
+
+<p>
+Made by
+<a href="https://www.facebook.com/anusankar.hazra.7/"
+target="_blank">
+Anusankar Hazra
+</a>
+</p>
+
+</div>
+
+</section>
+
+<!-- ABOUT POPUP -->
+
+<div class="popup"
+id="popup">
+
+<div class="popup-box glass">
+
+<h2>
+🌦️ Weather App
+</h2>
+
+<p style="margin-top:20px;line-height:2;">
+
+Premium Glassmorphism Weather Application
+
+<br><br>
+
+Made By:
+Anusankar Hazra
+
+</p>
+
+<button class="close-btn"
+onclick="closePopup()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<!-- CONTACT POPUP -->
+
+<div class="popup"
+id="contactPopup">
+
+<div class="popup-box glass">
+
+<h2>
+📞 Contact Us
+</h2>
+
+<p style="margin-top:20px;line-height:2;"> <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="22" style="vertical-align:middle;"> Anusankar Hazra (8509093061) <br><br>
+
+<br><br>
+
+📱 Facebook:
+<a href="https://www.facebook.com/anusankar.hazra.7/"
+target="_blank">
+Visit Profile
+</a>
+
+</p>
+
+<button class="close-btn"
+onclick="closeContactPopup()">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+<!-- RATE POPUP -->
+
+<div class="popup"
+id="ratePopup">
+
+<div class="popup-box glass">
+
+<h2>
+⭐ Rate Our App
+</h2>
+
+<input
+type="text"
+id="userName"
+placeholder="Your Name"
+class="feedback-input">
+
+<input
+type="email"
+id="userEmail"
+placeholder="Email Address"
+class="feedback-input">
+
+<textarea
+id="userFeedback"
+placeholder="Write feedback..."
+class="feedback-textarea"></textarea>
+
+<div class="stars">
+
+<span onclick="setRating(1)">⭐</span>
+<span onclick="setRating(2)">⭐</span>
+<span onclick="setRating(3)">⭐</span>
+<span onclick="setRating(4)">⭐</span>
+<span onclick="setRating(5)">⭐</span>
+
+</div>
+
+<p id="ratingText">
+Select Rating
+</p>
+
+<button
+class="submit-btn"
+onclick="submitFeedback()">
+
+Submit Feedback
+
+</button>
+
+<button
+class="close-btn"
+onclick="closeRatePopup()">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<nav class="bottom">
+
+<button class="nav active"
+data-screen="homeScreen">
+🏠
+</button>
+
+<button class="nav"
+data-screen="searchScreen">
+🔍
+</button>
+
+<button class="nav"
+data-screen="forecastScreen">
+📅
+</button>
+
+<button class="nav"
+data-screen="settingsScreen">
+⚙️
+</button>
+
+</nav>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+const apiKey =
+"c2c27b9fc256758d2c1ee36e10cc64df";
+
+const supabaseUrl =
+"https://gsibtgwcrwpurfwrzqcp.supabase.co";
+
+const supabaseKey =
+"sb_publishable_rC6wPQj91Mc9JtE_d_Kqyg_dbSa0Xsy";
+
+const supabaseClient =
+supabase.createClient(
+supabaseUrl,
+supabaseKey
+);
+
+let selectedRating = 0;
+
+
+// NAVIGATION
+
+const screens =
+document.querySelectorAll(".screen");
+
+const navButtons =
+document.querySelectorAll(".nav");
+
+navButtons.forEach((button)=>{
+
+button.addEventListener("click",()=>{
+
+navButtons.forEach((btn)=>{
+btn.classList.remove("active");
+});
+
+button.classList.add("active");
+
+screens.forEach((screen)=>{
+screen.classList.remove("active");
+});
+
+document
+.getElementById(button.dataset.screen)
+.classList.add("active");
+
+});
+
+});
+
+
+// TIME
+
+function updateTime(){
+
+document.getElementById("time")
+.innerHTML =
+new Date().toLocaleString();
+
+}
+
+updateTime();
+
+setInterval(updateTime,1000);
+
+
+// DARK MODE
+
+document
+.getElementById("darkBtn")
+.addEventListener("click",()=>{
+
+document.body.classList.toggle("dark");
+
+});
+
+
+// ABOUT POPUP
+
+function openPopup(){
+
+document.getElementById("popup")
+.style.display = "flex";
+
+}
+
+function closePopup(){
+
+document.getElementById("popup")
+.style.display = "none";
+
+}
+
+
+// CONTACT POPUP
+
+function openContactPopup(){
+
+document.getElementById("contactPopup")
+.style.display = "flex";
+
+}
+
+function closeContactPopup(){
+
+document.getElementById("contactPopup")
+.style.display = "none";
+
+}
+
+
+// RATE POPUP
+
+function openRatePopup(){
+
+document.getElementById("ratePopup")
+.style.display = "flex";
+
+}
+
+function closeRatePopup(){
+
+document.getElementById("ratePopup")
+.style.display = "none";
+
+}
+
+function setRating(star){
+
+selectedRating = star;
+
+document.getElementById("ratingText")
+.innerHTML =
+"Selected Rating: " + star + "⭐";
+
+}
+
+
+// SUBMIT FEEDBACK
+
+async function submitFeedback(){
+
+const name =
+document.getElementById("userName")
+.value.trim();
+
+const email =
+document.getElementById("userEmail")
+.value.trim();
+
+const feedback =
+document.getElementById("userFeedback")
+.value.trim();
+
+if(
+name === "" ||
+email === "" ||
+feedback === "" ||
+selectedRating === 0
+){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+const { data, error } =
+await supabaseClient
+.from("ratings")
+.insert([
+{
+name:name,
+email:email,
+feedback:feedback,
+rating:selectedRating
+}
+]);
+
+if(error){
+
+console.log(error);
+
+alert("Submission Failed");
+
+}
+
+else{
+
+alert("✅ Feedback Submitted");
+
+document.getElementById("userName").value = "";
+document.getElementById("userEmail").value = "";
+document.getElementById("userFeedback").value = "";
+
+selectedRating = 0;
+
+closeRatePopup();
+
+}
+
+}
+
+
+// WEATHER ICON
+
+function getIcon(condition){
+
+condition =
+condition.toLowerCase();
+
+if(condition.includes("rain")){
+return "https://cdn-icons-png.flaticon.com/512/1779/1779807.png";
+}
+
+if(condition.includes("cloud")){
+return "https://cdn-icons-png.flaticon.com/512/414/414825.png";
+}
+
+return "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+
+}
+
+
+// UPDATE UI
+
+function updateUI(data){
+
+document.getElementById("city")
+.innerHTML =
+data.name;
+
+document.getElementById("temp")
+.innerHTML =
+Math.round(data.main.temp) + "°";
+
+document.getElementById("condition")
+.innerHTML =
+data.weather[0].main;
+
+document.getElementById("highlow")
+.innerHTML =
+`H:${Math.round(data.main.temp_max)}° L:${Math.round(data.main.temp_min)}°`;
+
+document.getElementById("humidity")
+.innerHTML =
+data.main.humidity + "%";
+
+document.getElementById("wind")
+.innerHTML =
+data.wind.speed + " km/h";
+
+document.getElementById("pressure")
+.innerHTML =
+data.main.pressure + " hPa";
+
+document.getElementById("icon")
+.src =
+getIcon(data.weather[0].main);
+
+}
+
+
+// WEATHER
+
+async function getWeather(city){
+
+const response =
+await fetch(
+`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+);
+
+const data =
+await response.json();
+
+if(String(data.cod)!=="200"){
+
+alert("City not found");
+
+return;
+
+}
+
+updateUI(data);
+
+getForecast(city);
+
+getHourlyForecast(city);
+
+}
+
+
+// FORECAST
+
+async function getForecast(city){
+
+const response =
+await fetch(
+`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`
+);
+
+const data =
+await response.json();
+
+const forecastList =
+document.getElementById("forecastList");
+
+forecastList.innerHTML = "";
+
+for(let i=0;i<data.list.length;i+=8){
+
+const item =
+data.list[i];
+
+const day =
+new Date(item.dt*1000)
+.toLocaleDateString("en-US",{
+weekday:"long"
+});
+
+forecastList.innerHTML +=
+
+`
+<div class="forecast-item glass">
+
+<div>
+
+<h3>${day}</h3>
+
+<p>${item.weather[0].main}</p>
+
+</div>
+
+<div>
+
+<h2>${Math.round(item.main.temp)}°</h2>
+
+</div>
+
+</div>
+`;
+
+}
+
+}
+
+
+// HOURLY FORECAST
+
+async function getHourlyForecast(city){
+
+const response =
+await fetch(
+`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`
+);
+
+const data =
+await response.json();
+
+const hourly =
+document.getElementById("hourlyForecast");
+
+hourly.innerHTML = "";
+
+for(let i=0;i<8;i++){
+
+const item =
+data.list[i];
+
+const time =
+new Date(item.dt*1000)
+.toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
+});
+
+hourly.innerHTML +=
+
+`
+<div class="hour-card glass">
+
+<p>${time}</p>
+
+<img src="${getIcon(item.weather[0].main)}">
+
+<h3>${Math.round(item.main.temp)}°</h3>
+
+</div>
+`;
+
+}
+
+}
+
+
+// LOCATION WEATHER
+
+function getLocationWeather(){
+
+navigator.geolocation.getCurrentPosition(
+
+async(position)=>{
+
+const lat =
+position.coords.latitude;
+
+const lon =
+position.coords.longitude;
+
+const response =
+await fetch(
+`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+);
+
+const data =
+await response.json();
+
+updateUI(data);
+
+getForecast(data.name);
+
+getHourlyForecast(data.name);
+
+},
+
+()=>{
+
+getWeather("Kolkata");
+
+}
+
+);
+
+}
+
+
+// SEARCH
+
+function searchCity(){
+
+const city =
+document
+.getElementById("searchInput")
+.value
+.trim();
+
+if(city !== ""){
+
+getWeather(city);
+
+}
+
+}
+
+
+// AUTO LOAD
+
+window.onload = ()=>{
+
+getLocationWeather();
+
+};
+
+</script>
+
+</body>
+
+</html>
+
